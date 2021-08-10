@@ -1,0 +1,6 @@
+# About Notebooks
+
+1 - preprocessing_data.ipynb
+2 - preparing_final_dataset.ipynb
+3 - 
+4 - CNN_final_implementation.ipynb
