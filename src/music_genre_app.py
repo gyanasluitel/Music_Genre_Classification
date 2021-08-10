@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from pydub import AudioSegment
 
+import platform
 
 # Defining Constants
 n_mfcc = 13
@@ -26,10 +27,9 @@ SAMPLES_PER_TRACK = SAMPLE_RATE * TRACK_DURATION
 
 
 num_samples_per_segment = int(SAMPLES_PER_TRACK / num_segments)
-# print(f'No of samples per segment: {num_samples_per_segment}')
+
 expected_num_mfcc_vectors_per_segment = math.ceil(
     num_samples_per_segment / hop_length)
-# print(f'Expected no of mfcc vectors per segment: {expected_num_mfcc_vectors_per_segment}')
 
 
 def generating_headers(n_mfcc=13):
@@ -137,15 +137,15 @@ def predict_song(song_path):
 def generating_mfcc_plot(song_path):
     signal, sample_rate = librosa.load(song_path, sr=SAMPLE_RATE)
 
-    MFCCs = librosa.feature.mfcc(signal, 
-        sample_rate,
-        n_fft = n_fft,
-        hop_length = hop_length,
-        n_mfcc = n_mfcc)
+    MFCCs = librosa.feature.mfcc(signal,
+                                 sample_rate,
+                                 n_fft=n_fft,
+                                 hop_length=hop_length,
+                                 n_mfcc=n_mfcc)
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
-    librosa.display.specshow(MFCCs, sr = sample_rate, hop_length = hop_length)
+    librosa.display.specshow(MFCCs, sr=sample_rate, hop_length=hop_length)
     plt.xlabel("Time")
     plt.ylabel("MFCC Coefficients")
     plt.title("MFCCs")
@@ -156,11 +156,18 @@ def generating_mfcc_plot(song_path):
 @st.cache(allow_output_mutation=True)
 def load_model():
     dirname = os.path.dirname(__file__)
-    # print(dirname)
-    os.chdir(dirname + '/..')
-    main_path = os.getcwd()
-    print(main_path)
-    model_path = os.path.join(main_path, 'models/CNN_model_mfcc13_G.h5')
+    system_name = platform.system()
+    if system_name == 'Linux':
+        os.chdir(dirname + '/..')
+        main_path = os.getcwd()
+        # print(main_path)
+        model_path = os.path.join(main_path, 'models/CNN_model_mfcc13_G.h5')
+    elif system_name == 'Windows':
+        os.chdir(dirname + '\..')
+        main_path = os.getcwd()
+        # print(main_path)
+        model_path = os.path.join(main_path, 'models\CNN_model_mfcc13_G.h5')
+
     cnn_model = keras.models.load_model(model_path)
     cnn_model.summary()
     os.chdir(dirname)
@@ -168,14 +175,6 @@ def load_model():
 
 
 if __name__ == '__main__':
-    # dirname = os.path.dirname(__file__)
-    # # print(dirname)
-    # os.chdir(dirname + '\..')
-    # main_path = os.getcwd()
-    # print(main_path)
-    # model_path = os.path.join(main_path, 'models\cnn_model_mfcc13.h5')
-    # cnn_model = keras.models.load_model(model_path)
-    # print(file_path)
     cnn_model = load_model()
     header_html = '''
         <h1 style='text-align:center; font-size:56px'>Music Genre Classifier</h1>
@@ -184,22 +183,12 @@ if __name__ == '__main__':
     st.markdown(header_html, unsafe_allow_html=True)
     file = st.sidebar.file_uploader("Please Upload a wav Audio File",
                                     type=["wav"])
-    # print(dir(file))
-    # print('File: {}'.format(file))
-    # # print('File Name: {}'.format(file.name()))
-    # print(('Type of File: {}'.format(type(file))))
 
     if file is not None:
-        # print('File Name: {}'.format(file.name))
-
-        # print('File Name: {}'.format(file.getvalue()))
-        # datapath = r'C: \Users\Predator\Desktop\AI Project\src'
         datapath = os.getcwd()
         file_var = AudioSegment.from_wav(file)
         print('Exporting')
-
         dirname = os.path.dirname(__file__)
-        # song_path = os.path.join(dirname, file.name)
         song_path = os.path.join(dirname, file.name)
         print(song_path)
         file_var.export(song_path, format='wav')
@@ -207,44 +196,25 @@ if __name__ == '__main__':
 
         st.sidebar.write("**Play the Song!**")
         st.sidebar.audio(file, "audio/wav")
-        # song = AudioSegment.from_wav(file)
-        # audio_bytes = file.read()
-        # print(audio_bytes)
-        # print(type(audio_bytes))
-        # song_path = 'C:\Users\Predator\Desktop\AI Project\songs'
-        # sound = AudioSegment.from_wav(song_path+file.name)
-        # sound.export(song_path+file.name[:-4])
 
     if st.sidebar.button('Predict the song!'):
         if file is None:
             st.error("Please upload a file")
         else:
-            # # audio_bytes = file.read()
             with st.spinner("Predicting..."):
                 predicted_mean, predicted_label = predict_song(song_path)
-                # predicted_mean = pd.DataFrame(predicted_mean, columns=['Probability'])
-                # print(predicted_mean)
-                # print(type(predicted_mean))
                 plt.style.use(['seaborn'])
                 fig, ax = plt.subplots(figsize=(8, 6))
-                
-                ax.bar(x=predicted_mean.index, height=predicted_mean)
 
+                ax.bar(x=predicted_mean.index, height=predicted_mean)
 
                 st.write("Predicted Label: {}".format(predicted_label))
 
-                # st.subheader('Predicted vs Genre')
-                # st.bar_chart(predicted_mean)
-
-                
                 plt.title('Probability Distribution of Predicted Genres')
                 plt.xticks(rotation=90)
                 plt.xlabel('Genres')
                 plt.ylabel('Probability')
 
-                # ax.set_title("Probability Distribution of Predicted Genres")
-                # ax.xlabel('Genres')
-                # ax.ylabel('Probability')
                 st.pyplot(fig)
 
                 st.write('The MFCC graph of the song:')
