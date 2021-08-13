@@ -2,5 +2,5 @@
 
 - 1 - preprocessing_data.ipynb
 - 2 - preparing_final_dataset.ipynb
-- 3 - Implementing_a_ANN(MLP).ipynb & solving_overfitting.ipynb
+- 3 - Implementing_a_ANN(MLP).ipynb & solving_overfitting.ipynb (will change)
 - 4 - CNN_final_implementation.ipynb
