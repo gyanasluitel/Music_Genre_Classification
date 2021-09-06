@@ -16,19 +16,19 @@ Steps:
 1. Open the command prompt in this project directory.
 
 2. Installing pipenv and virtualenv
-$ pip install pipenv
+    $ pip install pipenv
 
-$ pip install virtualenv
+    $ pip install virtualenv
 
 3. Creating virtualenv and activating
-$ virtualenv <env_name>
-Eg: virtualenv music_test
+    $ virtualenv <env_name>
+    Eg: virtualenv music_test
 
-$ music_test\Scripts\activate
+    $ music_test\Scripts\activate
 
 4. Install packages
-$ pipenv install -r final_requirements.txt
+    $ pipenv install -r final_requirements.txt
 
 5. Run Streamlit Application To Predict Songs
-$ cd src
-$ streamlit run music_genre_app.py
+    $ cd src
+    $ streamlit run music_genre_app.py
