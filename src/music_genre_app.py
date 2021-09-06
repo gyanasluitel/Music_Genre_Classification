@@ -155,7 +155,8 @@ def generating_mfcc_plot(song_path):
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    dirname = os.path.dirname(__file__)
+    # dirname = os.path.dirname(__file__)
+    dirname = os.path.dirname(os.path.abspath(__file__))
     system_name = platform.system()
     if system_name == 'Linux':
         os.chdir(dirname + '/..')
@@ -188,7 +189,8 @@ if __name__ == '__main__':
         datapath = os.getcwd()
         file_var = AudioSegment.from_wav(file)
         print('Exporting')
-        dirname = os.path.dirname(__file__)
+        # dirname = os.path.dirname(__file__)
+        dirname = os.path.dirname(os.path.abspath(__file__))
         song_path = os.path.join(dirname, file.name)
         print(song_path)
         file_var.export(song_path, format='wav')

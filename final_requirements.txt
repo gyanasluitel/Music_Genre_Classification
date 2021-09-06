@@ -1,0 +1,9 @@
+pip==21.2.3
+streamlit==0.86.0
+tensorflow==2.6.0
+matplotlib==3.4.3
+pydub==0.25.1
+pickle-mixin==1.0.2
+seaborn==0.11.2
+librosa==0.8.1
+keras==2.6.0
