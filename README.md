@@ -13,23 +13,22 @@ Installing Dependencies and running project
 Make sure Python and pip is installed (64 bit).
 
 Steps:
-Open the command prompt in this project directory.
+1. Open the command prompt in this project directory.
 
----------------Installing pipenv and virtualenv-------------
+2. Installing pipenv and virtualenv
 $ pip install pipenv
 
 $ pip install virtualenv
 
---------------Creating virtualenv and activating------------
+3. Creating virtualenv and activating
 $ virtualenv <env_name>
 Eg: virtualenv music_test
 
 $ music_test\Scripts\activate
 
---------------Install packages----------------------
+4. Install packages
 $ pipenv install -r final_requirements.txt
 
-
---------------Run Streamlit Application To Predict Songs--------------
+5. Run Streamlit Application To Predict Songs
 $ cd src
 $ streamlit run music_genre_app.py
