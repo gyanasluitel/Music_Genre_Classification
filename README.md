@@ -1,5 +1,5 @@
 # Music_Genre_Classification
-A Musical Genre Classifier developed using Deep Learning Models
+A Music Genre Classifier developed using Deep Learning Models. Developed MLP and CNN Models. Final streamlit application based on CNN Model.
 
 -----------------------------------------------------------------------------
 
